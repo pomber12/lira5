@@ -1,0 +1,98 @@
+<!doctype html>
+<!--
+  ЛИРА – 3D холограма
+  =====================================================
+  Как да я пуснеш: отвори този файл с два клика (Chrome, Edge, Firefox).
+  Всички файлове трябва да са в една папка.
+
+  Файловете:
+    index.html       – тази страница (бутони, надписи)
+    style.css        – цветове, шрифтове, вид на бутоните
+    phrases.js       – КАКВО КАЗВА ТЯ (тук добавяй/сменяй фрази)
+    city.js          – фонът: дъжд и неонови светлини
+    voice.js         – как показва и казва фразите
+    hologram.js      – 3D сцената: моделът, движенията, проекторът
+    balcony.js       – изгледът „Балкон“: нощният град около нея
+    room.js          – изгледът „Стая“: апартаментът ѝ
+    lira-engine.js   – готова 3D библиотека (three.js + three-vrm). Не я пипай.
+    models/          – визиите (3D моделите), записани като текст, за да тръгват без сървър
+    lira.vrm         – първата визия като нормален 3D файл
+-->
+<html lang="bg">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Лира</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,300;0,600;1,300&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="style.css?v=41">
+  <style>body { margin: 0; } [hidden] { display: none !important; }</style>
+</head>
+<body>
+
+  <!-- Фонът (град и дъжд) и 3D холограмата са два слоя един върху друг -->
+  <canvas id="room" aria-hidden="true" hidden></canvas>
+  <canvas id="skyline" aria-hidden="true" hidden></canvas>
+  <canvas id="city" aria-hidden="true"></canvas>
+  <canvas id="holo" aria-label="Холограма на Лира. Докосни я, за да ти каже нещо."></canvas>
+  <div class="scan" aria-hidden="true"></div>
+  <div class="streaks" aria-hidden="true"></div>
+  <div id="poseDots" class="pose-dots"></div>
+
+  <!-- Перилата на балкона (виждат се само в изглед „Балкон“) -->
+  <svg class="rail" aria-hidden="true" viewBox="0 0 1000 600" preserveAspectRatio="none">
+    <!-- Перила в перспектива: близо до теб долу вдясно, отдалечават се навътре -->
+    <path id="railDeck" fill="#07060c" d=""/>
+    <g id="bars" fill="#0b0a14"></g>
+    <path id="railTopBar" fill="#1a1a2c" d=""/>
+    <path id="railGlint" fill="#ff7ad6" opacity=".35" d=""/>
+  </svg>
+
+  <!-- Надпис докато моделът се зарежда -->
+  <div class="load" id="load">
+    <div><span id="loadTxt">Проекцията се зарежда…</span><i><b id="loadBar"></b></i></div>
+  </div>
+
+  <!-- Горе: име, настроение и бутони -->
+  <header class="hud">
+    <div class="brand">
+      <h1>ЛИРА</h1>
+      <p>проекция · <b id="mood">спокойна</b></p>
+    </div>
+    <!-- Всички опции са в падащо меню „Опции“ -->
+    <details class="menu" id="menu">
+      <summary>Опции</summary>
+      <div class="menu-list">
+        <p class="menu-label">Момиче</p>
+        <button type="button" id="outfitBtn" title="Смени визията">Визия: Лира</button>
+        <button type="button" id="sayBtn">Кажи нещо</button>
+        <button type="button" id="voiceBtn" aria-pressed="false" hidden>Глас</button>
+        <label class="filebtn">Друг модел<input type="file" id="fileIn" accept=".vrm,.glb"></label>
+        <p class="menu-label">Движение</p>
+        <button type="button" id="offerBtn" aria-pressed="false" hidden>Подай ръка</button>
+        <button type="button" id="walkBtn" aria-pressed="false">Разходка</button>
+        <button type="button" id="danceBtn" aria-pressed="false">Танц</button>
+        <button type="button" id="sitBtn" aria-pressed="false">Седни</button>
+        <button type="button" id="poseBtn" aria-pressed="false">Поза</button>
+        <button type="button" id="poseResetBtn" hidden>Нулирай позата</button>
+        <p class="menu-label">Изглед</p>
+        <button type="button" id="roomBtn" aria-pressed="false">Стая</button>
+        <button type="button" id="balconyBtn" aria-pressed="false">Балкон</button>
+        <button type="button" id="closeBtn" aria-pressed="false">Отблизо</button>
+      </div>
+    </details>
+  </header>
+
+  <!-- Долу: субтитрите с думите ѝ -->
+  <div class="sub" aria-live="polite"><p id="line"></p></div>
+  <div class="hint">докосни я · плъзни, за да я завъртиш</div>
+
+  <!-- Редът на скриптовете е важен -->
+  <script src="phrases.js?v=41"></script>
+  <script src="city.js?v=41"></script>
+  <script src="voice.js?v=41"></script>
+  <script src="lira-engine.js?v=41"></script>
+  <script src="room.js?v=41"></script>
+  <script src="balcony.js?v=41"></script>
+  <script src="hologram.js?v=41"></script>
+</body>
+</html>

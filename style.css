@@ -1,0 +1,420 @@
+/* =========================================================
+   ЛИРА – стилове (цветове, шрифтове, бутони, субтитри)
+   Цветовете са най-горе в :root – смени ги оттам.
+   ========================================================= */
+:root {
+  --bg: #04050b;
+  --ink: #eef6ff;
+  --muted: #8095b5;
+  --line: rgb(130 210 255/0.2);
+  --glass: rgb(10 14 28/0.55);
+  --cyan: #6fe8ff;
+  --pink: #ff7ad6;
+  --glow: rgb(111 232 255/0.55);
+  --display: "Exo 2", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+  color-scheme: dark;
+}
+html,
+body {
+  height: 100%;
+}
+[hidden] {
+  display: none !important;
+}
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.5 var(--display);
+  overflow: hidden;
+}
+#city,
+#holo {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#holo {
+  cursor: grab;
+  touch-action: none;
+  opacity: 0.86;
+  filter: drop-shadow(0 0 10px var(--glow)) saturate(1.1);
+  transition: filter 1.5s;
+}
+#holo.glitch {
+  transform: translateX(6px) skewX(-2deg);
+  filter: drop-shadow(-4px 0 0 rgb(255 60 180/0.6))
+    drop-shadow(4px 0 0 rgb(60 220 255/0.6)) hue-rotate(40deg);
+  opacity: 0.7;
+}
+.scan {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgb(120 220 255/0.07) 0 1px,
+    transparent 1px 3px
+  );
+  mix-blend-mode: screen;
+  animation: roll 7s linear infinite;
+}
+.scan::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 18%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(120 220 255/0.06),
+    transparent
+  );
+  animation: sweep 6s linear infinite;
+}
+@keyframes roll {
+  to {
+    background-position: 0 300px;
+  }
+}
+@keyframes sweep {
+  from {
+    top: -20%;
+  }
+  to {
+    top: 110%;
+  }
+}
+.hud {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding-top: calc(16px + env(safe-area-inset-top, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  pointer-events: none;
+}
+.hud > * {
+  pointer-events: auto;
+}
+.brand h1 {
+  margin: 0;
+  font: 600 22px/1 var(--display);
+  letter-spacing: 0.45em;
+  color: var(--cyan);
+  text-shadow: 0 0 16px var(--glow);
+}
+.brand p {
+  margin: 6px 0 0;
+  font: 400 11px var(--mono);
+  color: var(--muted);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.brand b {
+  color: var(--pink);
+  font-weight: 600;
+}
+.btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  max-width: 60vw;
+}
+button,
+.filebtn {
+  font: 500 11px var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 7px 14px;
+}
+button:hover,
+.filebtn:hover {
+  border-color: var(--cyan);
+}
+button[aria-pressed="true"] {
+  border-color: var(--pink);
+  color: var(--pink);
+}
+button:focus-visible,
+.filebtn:focus-within {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+.filebtn input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.sub {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(9vh + env(safe-area-inset-bottom, 0px));
+  text-align: center;
+  pointer-events: none;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.sub p {
+  display: inline-block;
+  max-width: 34ch;
+  margin: 0;
+  font: 300 italic clamp(18px, 2.6vw, 26px) / 1.4 var(--display);
+  color: var(--ink);
+  text-shadow:
+    0 0 18px rgb(255 122 214/0.45),
+    0 1px 3px #000,
+    0 0 2px #000;
+  text-wrap: balance;
+  opacity: 0;
+  transition: opacity 1.2s;
+}
+.sub p.on {
+  opacity: 1;
+}
+.hint {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  text-align: center;
+  font: 400 10px var(--mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.7;
+  pointer-events: none;
+}
+.load {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.load div {
+  display: grid;
+  gap: 10px;
+  justify-items: center;
+  font: 400 11px var(--mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  text-align: center;
+  padding: 0 16px;
+}
+.load i {
+  display: block;
+  width: 180px;
+  height: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+.load i b {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+}
+.load .err {
+  color: var(--muted);
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 12px;
+  max-width: 34ch;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scan,
+  .scan::after {
+    animation: none;
+  }
+}
+
+/* ---------- Изглед „Балкон“ ---------- */
+#skyline {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#skyline[hidden] {
+  display: none;
+}
+.rail {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: none;
+}
+body.balcony .rail {
+  display: block;
+}
+body.balcony .sub {
+  bottom: calc(9vh + env(safe-area-inset-bottom, 0px));
+}
+/* На балкона холограмата е светлина: тъмните ѝ части стават прозрачни */
+body.balcony #holo {
+  opacity: 0.82;
+  mix-blend-mode: screen;
+  filter: drop-shadow(0 0 22px rgb(255 90 210 / 0.6)) saturate(1.2) brightness(1.1);
+}
+/* Хоризонтални светлинни ивици, които минават през нея */
+.streaks {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  display: none;
+  mix-blend-mode: screen;
+  background:
+    repeating-linear-gradient(to bottom, rgb(255 120 230 / 0.05) 0 2px, transparent 2px 7px),
+    linear-gradient(to right, transparent 0%, rgb(120 200 255 / 0.10) 20%, transparent 45%, rgb(255 90 210 / 0.08) 70%, transparent 100%);
+  background-size: 100% 100%, 250% 100%;
+  animation: streak 9s linear infinite;
+}
+body.balcony .streaks {
+  display: block;
+}
+@keyframes streak {
+  to { background-position: 0 0, -250% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .streaks { animation: none; }
+}
+
+/* ---------- Режим „Поза“: точки за хващане ---------- */
+.pose-dots {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+.pose-dot {
+  position: absolute;
+  left: -11px;
+  top: -11px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  background: rgb(111 232 255 / 0.55);
+  box-shadow: 0 0 10px rgb(111 232 255 / 0.9);
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+}
+.pose-dot.joint {
+  width: 16px;
+  height: 16px;
+  left: -8px;
+  top: -8px;
+  background: rgb(255 255 255 / 0.45);
+}
+.pose-dot.hair {
+  background: rgb(255 122 214 / 0.6);
+  box-shadow: 0 0 10px rgb(255 122 214 / 0.9);
+}
+.pose-dot.held {
+  cursor: grabbing;
+  background: #fff;
+}
+
+/* ---------- Изглед „Стая“ ---------- */
+#room {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+#room[hidden] {
+  display: none;
+}
+
+/* ---------- Падащо меню „Опции“ ---------- */
+.menu {
+  position: relative;
+}
+.menu summary {
+  list-style: none;
+  cursor: pointer;
+  font: 600 12px var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 8px 16px;
+  user-select: none;
+}
+.menu summary::-webkit-details-marker {
+  display: none;
+}
+.menu summary::after {
+  content: " ▾";
+}
+.menu[open] summary {
+  border-color: var(--cyan);
+}
+.menu[open] summary::after {
+  content: " ▴";
+}
+.menu summary:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+.menu-list {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 190px;
+  max-height: calc(100vh - 90px);
+  overflow-y: auto;
+  padding: 12px;
+  background: rgb(10 12 26 / 0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.5);
+}
+.menu-list button,
+.menu-list .filebtn {
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+.menu-label {
+  margin: 6px 2px 0;
+  font: 400 10px var(--mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.menu-label:first-child {
+  margin-top: 0;
+}
